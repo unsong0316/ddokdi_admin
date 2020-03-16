@@ -27,6 +27,8 @@ class Login extends Component {
                     <Route path ="/Medicine" component = {Medicine}/>
                     <Route path ="/EventAdder" component = {EventAdder}/>
                     <Route path ="/Greeting" component = {Greeting}/>
+                    {/* <Route path ="/admin_client_manager" component = {admin_client_manager}/> */}
+
 
                 </Switch>
             </div>

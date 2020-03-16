@@ -291,9 +291,56 @@ attempMedicine(userId, cb) {
     return  unpackResult;
   }//.detailEvent Result process function
 
+  attemptadmin_client_manager(userId, cb) {
+    let payload = {"USERID":userId};
+    let msg_sgi = {"payload":payload};
+    this.reqMsgProcess(msg_sgi, "/admin_client_manager", (result)=> {
+      cb(this.clientinformation(result));
+    });
+    }//.allEvent function
+
+  clientinformation(resMsg){
+    let msgPayload = resMsg.data;
+    let unpackResult = null;
+
+    unpackResult = [0, msgPayload.client_info];
+
+    return  unpackResult;
+  }
+
+  attemptClientEmergencyServiceUpdate_1(userId, cb) {
+    let payload = {"USERID":Client_userId};
+    let msg_sgi = {"payload":payload};
+    this.reqMsgProcess(msg_sgi, "/update_emergency_service_1", (result)=> {
+      cb(this.EmergencyServiceUpdateresult(result));
+    });
+  }//.Update Client emergency(1) service function
+
+  attemptClientEmergencyServiceUpdate_0(userId, cb) {
+    let payload = {"USERID":Client_userId};
+    let msg_sgi = {"payload":payload};
+    this.reqMsgProcess(msg_sgi, "/update_emergency_service_0", (result)=> {
+      cb(this.EmergencyServiceUpdateresult(result));
+    });
+  }//.Update Client emergency service function
+
+  EmergencyServiceUpdateresult(resMsg){
+    let msgPayload = resMsg.data;
+    let unpackResult = null;
+
+    switch(msgPayload.code){
+      case 200:
+        unpackResult = [0,msgPayload.success];
+        break;
+      default:
+        unpackResult = [1,"Unknown error"];
+        break;
+    }
+    return  unpackResult;
+  }//.Greeting Result process function 
+
 
 }
-
 
 
 export default MsgProcessor; 
