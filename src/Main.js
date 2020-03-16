@@ -8,6 +8,7 @@ import Dashboard from './Dashboard';
 import EventAdder from './EventAdder';
 // import UserGreeting from './tempfiles/UserGreeting';
 import Greeting from './Greeting';
+import admin_client_manager from './admin_client_manager';
 
 
 const useStyles = theme => ({
@@ -27,7 +28,7 @@ class Login extends Component {
                     <Route path ="/Medicine" component = {Medicine}/>
                     <Route path ="/EventAdder" component = {EventAdder}/>
                     <Route path ="/Greeting" component = {Greeting}/>
-                    {/* <Route path ="/admin_client_manager" component = {admin_client_manager}/> */}
+                    <Route path ="/admin_client_manager" component = {admin_client_manager}/>
 
 
                 </Switch>

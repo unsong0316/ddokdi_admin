@@ -55,88 +55,68 @@ class Client_Managment extends Component {
     super(props);
     this.max_content_id = 3;//UI에 영향을 주지 않으므로 state X
     this.state = {
-      Client_List: [{"name":"","age":""}],
+      Client_List: [{"Client_USERID":"", "name":"","age":""}],
       nlistLength: 0,
-      dEventNo:0,
-      dEventList: [],
-      jEventList: [],
-      jlistLength:0,
+      ClientUSERID:0,
+      Detail_client_list: []
+      
       }
     }
   
     componentDidMount(){
       let userId = localStorage.getItem("USN");
       let msgProc = new MsgProcessor();
-      msgProc.attemptadmin_client_manager(userId, (result)=> { 
+      msgProc.attemptadminclientManager(userId, (result)=> { 
         if (result[0] == 0) {
           console.log(result[1]);
           this.setState({
-            Client_Listt:result[1],
+            Client_List:result[1],
             nlistLength:result[1].length
           })  
         }
       });
-      msgProc.attemptJoinedEvent(userId, (result)=> { 
-        if (result[0] == 0) {
-          console.log(result[1]);
-          this.setState({
-            jEventList:result[1],
-            jlistLength:result[1].length
-          })  
-        }
-      });
-     
-    }
+      }
   
     handleListItemClick = event => {
       event.preventDefault();
       console.log(event);
       let userId = localStorage.getItem("USN");
+      let Client_userid = this.state.ClientUSERID
       let msgProc = new MsgProcessor();
-        let selectedEvent = event.target.innerText;
-        let eventList = this.state.nEventList;
-        eventList = eventList.concat(this.state.jEventList);
-        let eventNo = 0;
-        eventList.forEach(element => {
-          if(element.event_name === selectedEvent){
-            eventNo = element.event_no;
+        let selectedClient = event.target.innerText;
+        let client_list = this.state.Client_List;
+        client_list = client_list.concat(this.state.Client_List);
+        let Client_userId = 0;
+        client_list.forEach(element => {
+          if(element.name === selectedClient){
+            Client_userId = element.Client_USERID;
           }
         });
     
       this.setState({
-        dEventNo:eventNo
+        ClientUSERID:Client_userId
         
       }) 
-      
-
-      msgProc.attemptDetailEvent(eventNo, (result)=> { 
+      msgProc.attemptDetailEvent(Client_userId, (result)=> { 
         if (result[0] == 0) {
           console.log(result[1][0]);
           this.setState({
-            dEventList:result[1][0]
+            Detail_client_list:result[1][0]
           })  
-        }
-      });
-      msgProc.attemptCheckEvent(userId, eventNo, (result)=> { 
-        if (result[0] == 0) {
-          console.log(result[1]);
-        }
-        else {
-          alert(result[1]);
         }
       });
     }
 
     ///////////////////////////////////////////Join Submit동작X////////////////////////
-      handleJoinSubmit = event => {
+      handleEmergencyServiceSubmit = event => {
         // event.preventDefault();
         console.log(event);
         let userId = localStorage.getItem("USN");
         let msgProc = new MsgProcessor();
-        let eventNo = this.state.dEventNo; 
-          msgProc.attemptJoinEvent(userId, eventNo, (result)=> { 
+        let Client_userId = this.state.ClientUSERID; 
+          msgProc.attemptClientEmergencyServiceUpdate_1(Client_userId, userId, (result)=> { 
             if (result[0] == 0) {
-              // alert("참가신청 되었습니다.");
+              // alert("응급상황서비스 활성화.");
               console.log(result[1]);
             }
             else {
@@ -148,10 +128,10 @@ class Client_Managment extends Component {
 
       renderNewRow(mState, handleListItemClick ,props) {
         const { index, style } = props;
-        console.log(mState.nEventList);
-        let event_list =[];
-        mState.nEventList.forEach(element => {
-          event_list.push(element.event_name);
+        console.log(mState.Client_List);
+        let client_list =[];
+        mState.Client_List.forEach(element => {
+          client_list.push(element.name);
         });
 
         console.log(handleListItemClick);
@@ -161,7 +141,7 @@ class Client_Managment extends Component {
           ///List 항목 누르면 handledetailSubmit이 동작하게
           <form onSubmit={this.handleListItemClick}>
             <ListItem button onClick={handleListItemClick} style={style} key={index} id={1}>
-              <ListItemText primary= {<Typography variant="h5" Align="left">{event_list[index]} </Typography>}/>
+              <ListItemText primary= {<Typography variant="h5" Align="left">{client_list[index]} </Typography>}/>
             </ListItem>
             </form>
         );
@@ -214,11 +194,11 @@ class Client_Managment extends Component {
           <Paper className={classes.paper_1}>
           {this.state.nlistLength !== 0 ? 
            <Box color="text.secondary" fontSize={20} textAlign="left" fontWeight="fontWeightBold">
-              새로운 행사
+              Client List
               </Box>
               :
               <Box color="text.secondary" fontSize={20} textAlign="left" fontWeight="fontWeightBold">
-              참가 행사</Box>
+              Client List</Box>              
               }
               
               {this.state.nlistLength !== 0 ?
@@ -237,16 +217,20 @@ class Client_Managment extends Component {
               <Paper className={classes.paper_1}>
                 <Card className={classes.card_d}>
                   <CardHeader
-                    title={this.state.dEventList.event_name}
-                    subheader={this.state.dEventList.date}/>
+                    title={this.state.Detail_client_list.name}
+                    subheader={this.state.Detail_client_list.Client_USERID}
+                    />
                   <CardContent>
                     {this.state.dEventNo !== 0 ?<Typography align="left" variant="h5" color="textSecondary" component="p" >
                     <Box color="text.secondary" fontSize={20} textAlign="left" fontWeight="fontWeightBold">
-                      [대상] <br/>{this.state.dEventList.qualificaion}<br/>
-                      [내용] <br/>{this.state.dEventList.body}<br/>
-                      [장소] <br/>{this.state.dEventList.location}<br/>
-                      [특이사항] <br/>{this.state.dEventList.beneficial}<br/>
-                      [기타사항] <br/>{this.state.dEventList.ect}
+                      [생년월일] <br/>{this.state.Detail_client_list.age}<br/>
+                      [ID] <br/>{this.state.Detail_client_list.id}<br/>
+                      [비밀번호] <br/>{this.state.Detail_client_list.passwords}<br/>
+                      [성별] <br/>{this.state.Detail_client_list.gender}<br/>
+                      [연락처] <br/>{this.state.Detail_client_list.phone_no}<br/>
+                      [비상연락망] <br/>{this.state.Detail_client_list.emergency_contact}<br/>
+                      [비상연락인 관계] <br/>{this.state.Detail_client_list.relationship_emergency_res}<br/>
+                      [위급알림서비스활성화] <br/>{this.state.Detail_client_list.emergency_service}<br/>
                     </Box>
                        
                          <Grid container xs={12}>
@@ -255,7 +239,7 @@ class Client_Managment extends Component {
                               <form noValidate onSubmit={this.handleJoinSubmit}>
                              <br/><Button 
                              type = "submit" size="small" color="primary">
-                                <AddCircleIcon/><Typography variant="h4" Align="center">참가하기</Typography>
+                                <AddCircleIcon/><Typography variant="h4" Align="center">활성화하기</Typography>
                               </Button>
                             </form>
                            </Grid>

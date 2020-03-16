@@ -291,33 +291,33 @@ attempMedicine(userId, cb) {
     return  unpackResult;
   }//.detailEvent Result process function
 
-  attemptadmin_client_manager(userId, cb) {
+  attemptadminclientManager(userId, cb) {
     let payload = {"USERID":userId};
     let msg_sgi = {"payload":payload};
-    this.reqMsgProcess(msg_sgi, "/admin_client_manager", (result)=> {
+    this.reqMsgProcess(msg_sgi, "/admin_client_list", (result)=> {
       cb(this.clientinformation(result));
     });
-    }//.allEvent function
+    }//.all Client LIst function
 
   clientinformation(resMsg){
     let msgPayload = resMsg.data;
     let unpackResult = null;
 
-    unpackResult = [0, msgPayload.client_info];
+    unpackResult = [0, msgPayload.client_info_list];
 
     return  unpackResult;
   }
 
-  attemptClientEmergencyServiceUpdate_1(userId, cb) {
-    let payload = {"USERID":Client_userId};
+  attemptClientEmergencyServiceUpdate_1(Client_userId, userId, cb) {
+    let payload = {"Client_USERID":Client_userId, "USERID":userId};
     let msg_sgi = {"payload":payload};
     this.reqMsgProcess(msg_sgi, "/update_emergency_service_1", (result)=> {
       cb(this.EmergencyServiceUpdateresult(result));
     });
   }//.Update Client emergency(1) service function
 
-  attemptClientEmergencyServiceUpdate_0(userId, cb) {
-    let payload = {"USERID":Client_userId};
+  attemptClientEmergencyServiceUpdate_0(Client_userId, userId, cb) {
+    let payload = {"USERID":Client_userId, "USERID":userId};
     let msg_sgi = {"payload":payload};
     this.reqMsgProcess(msg_sgi, "/update_emergency_service_0", (result)=> {
       cb(this.EmergencyServiceUpdateresult(result));
@@ -338,6 +338,23 @@ attempMedicine(userId, cb) {
     }
     return  unpackResult;
   }//.Greeting Result process function 
+
+  attemptDetailClient(Client_userId, userId, cb) {
+    let payload = {"Client_USERID":Client_userId,"USERID":userId};
+    let msg_sgi = {"payload":payload};
+    this.reqMsgProcess(msg_sgi, "/admin_client_details", (result)=> {
+      cb(this.detailClientDetailResultProcess(result));
+    });
+  }//.allEvent function
+
+  detailClientDetailResultProcess(resMsg){
+    let msgPayload = resMsg.data;
+    let unpackResult = null;
+
+    unpackResult = [0, msgPayload.client_info];
+
+    return  unpackResult;
+  }//.detailEvent Result process function
 
 
 }
