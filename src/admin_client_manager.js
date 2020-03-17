@@ -84,7 +84,6 @@ class Client_Managment extends Component {
     handleListItemClick = event => {
       event.preventDefault();
       console.log(event);
-      let Client_userId = this.state.Client_List_without_admin.Client_USERID
       let userId = localStorage.getItem("USN");
       let msgProc = new MsgProcessor();
         let selectedClient = event.target.innerText;
