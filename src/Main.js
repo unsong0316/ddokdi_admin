@@ -10,7 +10,6 @@ import EventAdder from './EventAdder';
 import Greeting from './Greeting';
 import admin_client_manager from './admin_client_manager';
 
-
 const useStyles = theme => ({
       root: {
         flexGrow: 1,
@@ -29,7 +28,7 @@ class Login extends Component {
                     <Route path ="/EventAdder" component = {EventAdder}/>
                     <Route path ="/Greeting" component = {Greeting}/>
                     <Route path ="/admin_client_manager" component = {admin_client_manager}/>
-
+                    
 
                 </Switch>
             </div>

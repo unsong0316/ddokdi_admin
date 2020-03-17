@@ -3,7 +3,8 @@ import './App.css';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 import Paper  from '@material-ui/core/Paper';
-import ControlBoard from './servepart/ControlBoard';
+import SwitchLabels from './switch';
+import App_bar_for_admin_page from './Appbar';
 import { FixedSizeList } from 'react-window';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -15,10 +16,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ListSubheader from '@material-ui/core/ListSubheader';
-
-
-
 import MsgProcessor from "./servepart/MsgProcessor"
+
 
 
 
@@ -78,15 +77,7 @@ class Client_Managment extends Component {
           })
         }
       });
-      msgProc.attemptJoinedEvent(userId, (result)=> { 
-        if (result[0] == 0) {
-          console.log(result[1]);
-          this.setState({
-            Activate_Emergency_Service_list:result[1],
-            Activate_Emergency_Service_length:result[1].length
-          })  
-        }
-      });
+      
       }
     
   
@@ -127,8 +118,8 @@ class Client_Managment extends Component {
         console.log(event);
         let userId = localStorage.getItem("USN");
         let msgProc = new MsgProcessor();
-        let Client_userId = this.state.ClientUSERID; 
-          msgProc.attemptClientEmergencyServiceUpdate_1(userId, Client_userId, (result)=> { 
+        let Client_userId_for_detail = this.state.ClientUSERID; 
+          msgProc.attemptClientEmergencyServiceUpdate_1(userId, Client_userId_for_detail, (result)=> { 
             if (result[0] == 0) {
               // alert("응급상황서비스 활성화.");
               console.log(result[1]);
@@ -188,20 +179,19 @@ class Client_Managment extends Component {
             </form>
         );
       }
-      
-  
+
   // titleselect();
   // if()
 
   render(){
+    
     const { classes } = this.props;
     return (
       <div >
+        <App_bar_for_admin_page history = {this.props.history}/>
         <Grid container className={classes.root} spacing = {0}>
         {/* paper_1 첫번째 칸 */}
-          <Grid item xs={2}>
-          <ControlBoard history = {this.props.history}/>
-          </Grid>
+         
 
         {/* paper_2 두번째 칸 */}
           <Grid item xs={5} >
@@ -244,29 +234,19 @@ class Client_Managment extends Component {
                       [연락처] <br/>{this.state.Detail_client_list.phone_no}<br/>
                       [비상연락망] <br/>{this.state.Detail_client_list.emergency_contact}<br/>
                       [비상연락인 관계] <br/>{this.state.Detail_client_list.relationship_emergency_res}<br/>
-                      [위급알림서비스활성화] <br/>{this.state.Detail_client_list.emergency_service}<br/>
+                      [위급알림서비스활성화] <br/><SwitchLabels history = {this.props.history}/><br/>
                     </Box>
-                       
-                         <Grid container xs={12}>
-                           <Grid xs={4}/>
-                           <Grid xs={4}>
-                              <form noValidate onSubmit={this.handleEmergencyServiceSubmit_for_activate}>
-                             <br/><Button 
-                             type = "submit" size="small" color="primary">
-                                <AddCircleIcon/><Typography variant="h4" Align="center">활성화하기</Typography>
-                              </Button>
-                            </form>
-                           </Grid>
-                            <Grid xs={4}/>
-                         </Grid>                     
-                    </Typography> : <Typography variant="body2" color="textSecondary" component="p"/>}
-                  </CardContent>
-                </Card>              
+                      */}
+                    </Typography> : <Typography variant="body2" color="textSecondary" component="p"/>} 
+                 </CardContent>
+                </Card>               
               </Paper>
-            </Grid>
+              </Grid> 
           </Grid>
       </div>
-    );
+      );
+    }
   }
-}
+  
+
 export default  withStyles( useStyles )(Client_Managment);
