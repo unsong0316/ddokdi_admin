@@ -339,8 +339,8 @@ attempMedicine(userId, cb) {
     return  unpackResult;
   }//.Greeting Result process function 
 
-  attemptDetailClient(Client_userId, userId, cb) {
-    let payload = {"Client_USERID":Client_userId,"USERID":userId};
+  attemptDetailClient(Client_userId_for_detail, userId, cb) {
+    let payload = {"Client_USERID":Client_userId_for_detail,"USERID":userId};
     let msg_sgi = {"payload":payload};
     this.reqMsgProcess(msg_sgi, "/admin_client_details", (result)=> {
       cb(this.detailClientDetailResultProcess(result));
